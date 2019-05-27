@@ -23,7 +23,7 @@
 #'
 #' @export
 
-writeLPFile <- function(data = data, pknList = pknList, inputs = inputs, alphaWeight=1, betaWeight=0.2, scores=scores, mipGAP=0.1, poolrelGAP=0.01, limitPop=100, poolCap=100, poolIntensity=0, poolReplace=2,timelimit=1800,measWeights=NULL, repIndex, condition="") {
+writeLPFile <- function(data = data, pknList = pknList, inputs = inputs, alphaWeight=1, betaWeight=0.2, scores=scores, mipGAP=0.1, poolrelGAP=0.01, limitPop=100, poolCap=100, poolIntensity=0, poolReplace=2,timelimit=1800,measWeights=NULL, repIndex, condition="", loops = NULL) {
   dataMatrix <- buildDataMatrix(data = data, pknList = pknList, inputs = inputs)
   variables <- create_variables_all(pknList = pknList, dataMatrix = dataMatrix)
   # distVariables <- write_dist_variables(pknList = pknList)
@@ -40,8 +40,14 @@ writeLPFile <- function(data = data, pknList = pknList, inputs = inputs, alphaWe
   c6 <- write_constraints_6(variables = variables, dataMatrix = dataMatrix, inputs = inputs)
   c7 <- write_constraints_7(variables = variables, dataMatrix = dataMatrix, inputs = inputs)
   c8 <- write_constraints_8(variables = variables, inputs = inputs, pknList = pknList)
+  if(is.null(loops)){
+    allC <- all_constraints_wLoop(c0 = c0, c1 = c1, c2 = c2, c3 = c3, c4 = c4, c5 = c5, c6 = c6, c7 = c7, c8 = c8)
+  } else {
+    print("Writing new loop constraints..")
+    c9 = write_loop_constraints_2(variables = variables, loops = loops, pknList = pknList)
+    allC <- all_constraints_wLoop(c0 = c0, c1 = c1, c2 = c2, c3 = c3, c4 = c4, c5 = c5, c6 = c6, c7 = c7, c8 = c(c8, c9))
+  }
   # c9 <- write_loop_constraints(variables = variables, pknList = pknList, inputs = inputs)
-  allC <- all_constraints_wLoop(c0 = c0, c1 = c1, c2 = c2, c3 = c3, c4 = c4, c5 = c5, c6 = c6, c7 = c7, c8 = c8)
 
   # write the .lp file
   data = paste0("testFile_", condition,"_",repIndex,".lp")
