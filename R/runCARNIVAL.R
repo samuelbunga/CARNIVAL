@@ -26,6 +26,7 @@
 #'@param poolReplace CPLEX parameter: Replacement strategy of solutions in the pool (0,1,2 - default: 2 = most diversified solutions)
 #'@param alphaWeight Objective function: weight for mismatch penalty (default: 1 - will only be applied once measurement file only contains discrete values)
 #'@param betaWeight Objective function: weight for node penalty (defaul: 0.2)
+#'@param loops List of loops
 #'
 #'@return The networks and predicted node activities from the CARNIVAL pipeline as a variable which are also saved in the destined result folder
 #'
@@ -57,7 +58,8 @@ runCARNIVAL <- function(CplexPath=NULL,
                         poolIntensity=4,
                         poolReplace=2,
                         alphaWeight=1,
-                        betaWeight=0.2)
+                        betaWeight=0.2,
+                        loops = NULL)
 {
 
   # @param parallelCR Execute the parallelised version of CARNIVAL pipeline (logical T/F)
@@ -195,7 +197,7 @@ runCARNIVAL <- function(CplexPath=NULL,
                            scores=scores,mipGAP=mipGAP,poolrelGAP=poolrelGAP,limitPop=limitPop,
                            poolCap=poolCap,poolIntensity=poolIntensity,poolReplace=poolReplace,
                            timelimit=timelimit,measWeights=measWeights,
-                           repIndex=repIndex,condition = condition)
+                           repIndex=repIndex,condition = condition, loops = loops)
   Elapsed_1 <- proc.time() - ptm
 
   # Solve ILP problem with cplex, remove temp files, and return to the main directory
