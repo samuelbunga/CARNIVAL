@@ -13,42 +13,89 @@ write_loop_constraints_2 <- function(variables=variables, loops = loops, pknList
   gg = graph_from_data_frame(d = as.data.frame(pknList[, c(1, 3)]), directed = TRUE)
   adj = get.adjacency(graph = gg)
   
-  constraints = c()
-  for(ii in 1:length(loops)){
+  if(!is.character(loops[[1]])){
     
-    ll = loops[[ii]]
-    
-    for(vv in 1:length(variables)){
+    constraints = c()
+    for(ii in 1:length(loops)){
       
-      var = variables[[vv]]
-      for(jj in 1:(length(ll)-1)){
+      ll = loops[[ii]]
+      
+      for(vv in 1:length(variables)){
         
-        ss = rownames(adj)[ll[jj]]
-        tt = rownames(adj)[ll[jj+1]]
-        
-        if(jj==1){
+        var = variables[[vv]]
+        for(jj in 1:(length(ll)-1)){
           
-          c1 = var$variables[which(var$exp==paste0("ReactionUp ", ss, "=", tt, " in experiment ", vv))]
-          c2 = var$variables[which(var$exp==paste0("ReactionDown ", ss, "=", tt, " in experiment ", vv))]
+          ss = rownames(adj)[ll[jj]]
+          tt = rownames(adj)[ll[jj+1]]
           
-        } else {
-          
-          c1 = paste0(c1, " + ", var$variables[which(var$exp==paste0("ReactionUp ", ss, "=", tt, " in experiment ", vv))])
-          c2 = paste0(c2, " + ", var$variables[which(var$exp==paste0("ReactionDown ", ss, "=", tt, " in experiment ", vv))])
+          if(jj==1){
+            
+            c1 = var$variables[which(var$exp==paste0("ReactionUp ", ss, "=", tt, " in experiment ", vv))]
+            c2 = var$variables[which(var$exp==paste0("ReactionDown ", ss, "=", tt, " in experiment ", vv))]
+            
+          } else {
+            
+            c1 = paste0(c1, " + ", var$variables[which(var$exp==paste0("ReactionUp ", ss, "=", tt, " in experiment ", vv))])
+            c2 = paste0(c2, " + ", var$variables[which(var$exp==paste0("ReactionDown ", ss, "=", tt, " in experiment ", vv))])
+            
+          }
           
         }
         
+        c1 = paste0(c1, " < ", length(ll)-1)
+        c2 = paste0(c2, " < ", length(ll)-1)
+        
+        constraints = c(constraints, c1, c2)
+        
       }
-      
-      c1 = paste0(c1, " < ", length(ll)-1)
-      c2 = paste0(c2, " < ", length(ll)-1)
-      
-      constraints = c(constraints, c1, c2)
       
     }
     
+    return(constraints)
+    
+  } else {
+    
+    constraints = c()
+    for(ii in 1:length(loops)){
+      
+      ll = loops[[ii]]
+      ll = c(ll, loops[[ii]][1])
+      
+      for(vv in 1:length(variables)){
+        
+        var = variables[[vv]]
+        for(jj in 1:(length(ll)-1)){
+          
+          # ss = rownames(adj)[ll[jj]]
+          # tt = rownames(adj)[ll[jj+1]]
+          ss = ll[jj]
+          tt = ll[jj+1]
+          
+          if(jj==1){
+            
+            c1 = var$variables[which(var$exp==paste0("ReactionUp ", ss, "=", tt, " in experiment ", vv))]
+            c2 = var$variables[which(var$exp==paste0("ReactionDown ", ss, "=", tt, " in experiment ", vv))]
+            
+          } else {
+            
+            c1 = paste0(c1, " + ", var$variables[which(var$exp==paste0("ReactionUp ", ss, "=", tt, " in experiment ", vv))])
+            c2 = paste0(c2, " + ", var$variables[which(var$exp==paste0("ReactionDown ", ss, "=", tt, " in experiment ", vv))])
+            
+          }
+          
+        }
+        
+        c1 = paste0(c1, " < ", length(ll)-1)
+        c2 = paste0(c2, " < ", length(ll)-1)
+        
+        constraints = c(constraints, c1, c2)
+        
+      }
+      
+    }
+    
+    return(constraints)
+    
   }
-  
-  return(constraints)
   
 }
