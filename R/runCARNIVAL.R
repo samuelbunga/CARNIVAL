@@ -107,7 +107,8 @@ runCARNIVAL <- function(inputObj=NULL,
                         alphaWeight=1,
                         betaWeight=0.2,
                         threads=0,
-                        dir_name=paste0(getwd(), "/DOTfigures"))
+                        dir_name=paste0(getwd(), "/DOTfigures"), 
+                        parallelIdx=NULL)
 {
 
   res = checkInputs(solverPath = solverPath, netObj = netObj, measObj = measObj,
@@ -133,7 +134,8 @@ runCARNIVAL <- function(inputObj=NULL,
                          solver = solver,
                          threads = threads,
                          experimental_conditions = res$exp,
-                         condition = res$condition, repIndex = res$repIndex)
+                         condition = res$condition, repIndex = res$repIndex,
+                         parallelIdx = parallelIdx)
 
   cleanupCARNIVAL(condition = res$condition, repIndex = res$repIndex)
 

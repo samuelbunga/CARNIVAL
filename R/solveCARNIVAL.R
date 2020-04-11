@@ -22,7 +22,8 @@ solveCARNIVAL <- function(solverPath = solverPath,
                           threads = threads,
                           experimental_conditions = experimental_conditions,
                           condition = condition,
-                          repIndex = repIndex){
+                          repIndex = repIndex, 
+                          parallelIdx = parallelIdx){
   
   ## Write constraints as ILP inputObj
   print("Writing constraints...")
@@ -61,7 +62,7 @@ solveCARNIVAL <- function(solverPath = solverPath,
                                   solver = solver, solverPath = solverPath,
                                   variables = variables, measObj = measObj,
                                   inputObj = inputObj, DOTfig = DOTfig,
-                                  dir_name = dir_name)
+                                  dir_name = dir_name, parallelIdx = parallelIdx)
 
   } else {
 

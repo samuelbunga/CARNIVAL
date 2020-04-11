@@ -8,10 +8,14 @@ writeSolverFiles <- function(condition=condition, repIndex=repIndex, oF=oF,
                              poolrelGAP=poolrelGAP, poolReplace=poolReplace,
                              limitPop=limitPop, poolCap=poolCap,
                              threads = threads,
-                             poolIntensity=poolIntensity, timelimit=timelimit){
+                             poolIntensity=poolIntensity, timelimit=timelimit,
+                             parallelIdx = parallelIdx){
   
+  if(is.null(parallelIdx)){
+    parallelIdx=1
+  }
   ## write the .lp file
-  data = paste0("testFile_", condition,"_",repIndex,".lp")
+  data = paste0("testFile_", condition,"_",parallelIdx,".lp")
   write("enter Problem", data)
   write("", data, append = TRUE)
   write("Minimize", data, append = TRUE)
@@ -27,8 +31,8 @@ writeSolverFiles <- function(condition=condition, repIndex=repIndex, oF=oF,
   write("End", data, append = TRUE)
   
   ## write cplexCommand file
-  cplexCommand <- paste0("cplexCommand_", condition,"_",repIndex,".txt")
-  write(paste0("read testFile_", condition,"_",repIndex,".lp"), 
+  cplexCommand <- paste0("cplexCommand_", condition,"_",parallelIdx,".txt")
+  write(paste0("read testFile_", condition,"_",parallelIdx,".lp"), 
         cplexCommand, append = TRUE)
   write(paste0("set mip tolerances mipgap ",mipGAP), 
         cplexCommand, append = TRUE)
@@ -45,7 +49,7 @@ writeSolverFiles <- function(condition=condition, repIndex=repIndex, oF=oF,
   write(paste0("set timelimit ",timelimit), cplexCommand, append = TRUE)
   write(paste0("set threads ", threads), cplexCommand, append = TRUE)
   write("populate", cplexCommand, append = TRUE)
-  write(paste0("write results_cplex_", condition,"_",repIndex,".txt sol all"), 
+  write(paste0("write results_cplex_", condition,"_",parallelIdx,".txt sol all"), 
         cplexCommand, append = TRUE)
   write("quit", cplexCommand, append = TRUE)
   

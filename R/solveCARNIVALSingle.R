@@ -15,7 +15,7 @@ solveCARNIVALSingle <- function(data = data, pknList = pknList,
                                 condition = condition, solver = solver, 
                                 solverPath = solverPath, variables = variables,
                                 measObj = measObj, inputObj = inputObj, 
-                                dir_name = dir_name){
+                                dir_name = dir_name, parallelIdx = parallelIdx){
   
   variables <- writeLPFile(data = data, pknList = pknList,
                            inputs = inputs, alphaWeight = alphaWeight,
@@ -26,32 +26,36 @@ solveCARNIVALSingle <- function(data = data, pknList = pknList,
                            threads = threads,
                            poolReplace = poolReplace, timelimit = timelimit,
                            measWeights = measWeights, repIndex = repIndex,
-                           condition = condition)
+                           condition = condition, parallelIdx = parallelIdx)
   
   ## Solve ILP problem with cplex, remove temp files, 
   ## and return to the main directory
   print("Solving LP problem...")
+  
+  if(is.null(parallelIdx)){
+    parallelIdx=1
+  }
   
   if(solver=="cplex"){
     
     if (Sys.info()[1]=="Windows") {
       file.copy(from = solverPath,to = getwd())
       system(paste0("cplex.exe -f cplexCommand_", 
-                    condition,"_",repIndex,".txt"))
+                    condition,"_",parallelIdx,".txt"))
       file.remove("cplex.exe")
     } else {
       system(paste0(solverPath, " -f cplexCommand_", 
-                    condition,"_",repIndex,".txt"))
+                    condition,"_",parallelIdx,".txt"))
     }
     
     ## Write result files in the results folder
     print("Saving results...")
     resList <- list()
-    if (file.exists(paste0("results_cplex_",condition,"_",repIndex,".txt"))) {
+    if (file.exists(paste0("results_cplex_",condition,"_",parallelIdx,".txt"))) {
       for(i in 1:length(variables)){
         res <- exportResult(cplexSolutionFileName = paste0("results_cplex_",
                                                            condition,"_",
-                                                           repIndex,".txt"),
+                                                           parallelIdx,".txt"),
                             variables = variables, 
                             pknList = pknList, 
                             conditionIDX = i,
@@ -71,7 +75,7 @@ solveCARNIVALSingle <- function(data = data, pknList = pknList,
       return(NULL)
     }
     
-    cleanupCARNIVAL(condition = condition, repIndex = repIndex)
+    cleanupCARNIVAL(condition = condition, repIndex = parallelIdx)
     
     ## Remove global variable 
     objs <- ls(pos = ".GlobalEnv")
