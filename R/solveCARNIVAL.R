@@ -7,7 +7,6 @@ solveCARNIVAL <- function(solverPath = solverPath,
                           measObj = measObj, 
                           inputObj = inputObj, 
                           weightObj = weightObj,
-                          DOTfig = DOTfig, 
                           timelimit = timelimit, 
                           mipGAP = mipGAP, 
                           poolrelGAP = poolrelGAP, 
@@ -60,7 +59,7 @@ solveCARNIVAL <- function(solverPath = solverPath,
                                   repIndex = repIndex, condition = condition,
                                   solver = solver, solverPath = solverPath,
                                   variables = variables, measObj = measObj,
-                                  inputObj = inputObj, DOTfig = DOTfig,
+                                  inputObj = inputObj,
                                   dir_name = dir_name)
 
   } else {
