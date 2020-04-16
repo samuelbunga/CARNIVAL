@@ -7,7 +7,6 @@ checkInputs <- function(solverPath=NULL,
                         measObj=NULL,
                         inputObj=NULL,
                         weightObj=NULL,
-                        DOTfig=TRUE,
                         timelimit=600,
                         mipGAP=0.05,
                         poolrelGAP=0.0001,
@@ -18,7 +17,7 @@ checkInputs <- function(solverPath=NULL,
                         alphaWeight=1,
                         betaWeight=0.2,
                         threads=0,
-                        dir_name=paste0(getwd(), "/DOTfigures"),
+                        dir_name=dir_name,
                         solver="lpSolve"){
   
   returnList = list()
@@ -27,7 +26,7 @@ checkInputs <- function(solverPath=NULL,
   measObj = checkMeasObj(measObj = measObj, netObj = netObj)
   inputObj = checkInputObj(inputObj = inputObj, netObj = netObj)
   weightObj = checkWeightObj(weightObj = weightObj, netObj = netObj)
-  pp = checkSolverParam(DOTfig=DOTfig, timelimit=timelimit, mipGAP=mipGAP,
+  pp = checkSolverParam(timelimit=timelimit, mipGAP=mipGAP,
                         poolrelGAP=poolrelGAP, limitPop=limitPop, poolCap=poolCap,
                         poolIntensity=poolIntensity, poolReplace=poolReplace,
                         threads=threads,
