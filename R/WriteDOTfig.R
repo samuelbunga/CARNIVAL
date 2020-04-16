@@ -228,7 +228,7 @@ WriteDOTfig <- function(res, idxModel=0, dir_name,
     ##                           idxModel[counter_mod],".dot"))
     ## }
     fileConn <- file(paste0(dir_name,
-                            "network_solution.dot"))
+                            "/network_solution.dot"))
     writeLines(Dot_text,fileConn)
     close(fileConn)
 
