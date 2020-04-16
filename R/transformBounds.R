@@ -7,7 +7,8 @@ transformBounds <- function(mt = mt, lpFile = lpFile){
   idx1 <- which(lpFile$`enter Problem`=="Bounds")
   idx2 <- which(lpFile$`enter Problem`=="Binaries")
   
-  constraintSet <- lpFile$`enter Problem`[(idx1+1):(idx2-1)]
+  constraintSet <- lpFile$`enter Problem`[seq(from = idx1+1, 
+                                              to = idx2-1, by = 1)]
   
   f.con <- matrix(data = 0, nrow = 2*length(constraintSet), ncol = nrow(mt))
   ## f.dir <- c()
@@ -16,7 +17,7 @@ transformBounds <- function(mt = mt, lpFile = lpFile){
   f.rhs <- rep("", length(constraintSet)*2)
   
   cnt <- 1
-  for(ii in 1:length(constraintSet)){
+  for(ii in seq_len(length(constraintSet))){
     
     currConstraint <- strsplit(x = constraintSet[ii], split = " ", 
                                fixed = TRUE)[[1]]
