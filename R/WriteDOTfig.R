@@ -217,16 +217,18 @@ WriteDOTfig <- function(res, idxModel=0, dir_name,
     Dot_text <- c(Dot_text,"")
     Dot_text <- c(Dot_text,"}")
 
-    if(!is.null(UP2GS)){
-      dir.create(dir_name)
-      fileConn <- file(paste0(dir_name,
-                              "/ActivityNetwork_model_Nr",
-                              idxModel[counter_mod],"_",UP2GStag,".dot"))
-    } else {
-      dir.create(dir_name)
-      fileConn <- file(paste0(dir_name,"/ActivityNetwork_model_Nr",
-                              idxModel[counter_mod],".dot"))
-    }
+    ## if(!is.null(UP2GS)){
+    ##   dir.create(dir_name)
+    ##   fileConn <- file(paste0(dir_name,
+    ##                           "/ActivityNetwork_model_Nr",
+    ##                           idxModel[counter_mod],"_",UP2GStag,".dot"))
+    ## } else {
+    ##   dir.create(dir_name)
+    ##   fileConn <- file(paste0(dir_name,"/ActivityNetwork_model_Nr",
+    ##                           idxModel[counter_mod],".dot"))
+    ## }
+    fileConn <- file(paste0(dir_name,
+                            "network_solution.dot"))
     writeLines(Dot_text,fileConn)
     close(fileConn)
 

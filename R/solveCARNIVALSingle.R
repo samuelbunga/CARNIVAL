@@ -7,7 +7,7 @@ solveCARNIVALSingle <- function(data = data, pknList = pknList,
                                 betaWeight = betaWeight, scores = scores,
                                 mipGAP = mipGAP, poolrelGAP = poolrelGAP,
                                 limitPop = limitPop, poolCap = poolCap,
-                                poolIntensity = poolIntensity, DOTfig = DOTfig,
+                                poolIntensity = poolIntensity,
                                 poolReplace = poolReplace,
                                 timelimit = timelimit,
                                 threads = threads,
@@ -60,15 +60,21 @@ solveCARNIVALSingle <- function(data = data, pknList = pknList,
         resList[[length(resList)+1]] <- res
       }
       if (!is.null(res)) {
-        if (DOTfig) {WriteDOTfig(res=res,
-                                 dir_name=dir_name,
-                                 inputs=inputObj,
-                                 measurements=measObj,
-                                 UP2GS=FALSE)}
+        if(!is.null(dir_name)){
+          if(dir.exists(dir_name)){
+            WriteDOTfig(res=res,
+                        dir_name=dir_name,
+                        inputs=inputObj,
+                        measurements=measObj,
+                        UP2GS=FALSE)
+          } else {
+            warning("Specified directory does not exist. DOT figure not saved.")
+          }
+        }
+      } else {
+        message("No result to be written")
+        return(NULL)
       }
-    } else {
-      message("No result to be written")
-      return(NULL)
     }
     
     cleanupCARNIVAL(condition = condition, repIndex = repIndex)
@@ -107,11 +113,20 @@ solveCARNIVALSingle <- function(data = data, pknList = pknList,
                           solver = "cbc")
       
       if (!is.null(res)) {
-        if (DOTfig) {WriteDOTfig(res=res,
-                                 dir_name=dir_name,
-                                 inputs=inputObj,
-                                 measurements=measObj,
-                                 UP2GS=FALSE)}
+        if(!is.null(dir_name)){
+          if(dir.exists(dir_name)){
+            WriteDOTfig(res=res,
+                        dir_name=dir_name,
+                        inputs=inputObj,
+                        measurements=measObj,
+                        UP2GS=FALSE)
+          } else {
+            warning("Specified directory does not exist. DOT figure not saved.")
+          }
+        }
+      } else {
+        message("No result to be written")
+        return(NULL)
       }
       
       ## cleanupCARNIVAL(condition = condition, repIndex = repIndex)
@@ -134,11 +149,20 @@ solveCARNIVALSingle <- function(data = data, pknList = pknList,
                           conditionIDX = 1)
       
       if (!is.null(res)) {
-        if (DOTfig) {WriteDOTfig(res=res,
-                                 dir_name=dir_name,
-                                 inputs=inputObj,
-                                 measurements=measObj,
-                                 UP2GS=FALSE)}
+        if(!is.null(dir_name)){
+          if(dir.exists(dir_name)){
+                  WriteDOTfig(res=res,
+                              dir_name=dir_name,
+                              inputs=inputObj,
+                              measurements=measObj,
+                              UP2GS=FALSE)
+          } else {
+            warning("Specified directory does not exist. DOT figure not saved.")
+          }
+        }
+      } else {
+        message("No result to be written")
+        return(NULL)
       }
       
       return(res)
