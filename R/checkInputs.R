@@ -19,7 +19,7 @@ checkInputs <- function(solverPath=NULL,
                         betaWeight=0.2,
                         threads=0,
                         dir_name=paste0(getwd(), "/DOTfigures"),
-                        solver="cbc"){
+                        solver="lpSolve"){
   
   returnList = list()
   checkSolver(solverPath = solverPath, solver = solver, dir_name = dir_name)
@@ -50,7 +50,7 @@ checkInputs <- function(solverPath=NULL,
   if(nrow(measObj)==1){
     experimental_conditions = "NULL"
   } else {
-    experimental_conditions = 1:nrow(measObj)
+    experimental_conditions = seq_len(nrow(measObj))
   }
   
   returnList[[length(returnList)+1]] = inputObj$network

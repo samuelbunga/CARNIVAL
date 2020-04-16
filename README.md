@@ -33,77 +33,11 @@ install.packages('path_to_extracted_CARNIVAL_directory', repos = NULL, type="sou
 
 ## Running CARNIVAL
 
-To obtain the list of tutorials about how to run CARNIVAL over a few toy examples, user can start with typing the following commmand on R-console:
+To obtain the list of tutorials/vignettes of the CARNIVAL package, user can start with typing the following commmand on R-console:
 
 ```R
 vignette("CARNIVAL-vignette")
 ```
-
-### Real case example
-Now we show an example about how we can run CARNIVAL on a real case-study. We will show step-by-step how we can build a prior knowledge of signalling and a DoRothEA regulon list from [OmniPath](https://github.com/saezlab/OmnipathR). Next we show how we can estimate pathway activities via [PROGENy](https://github.com/saezlab/progeny). Next we will demonstrate how we can use the [viper](https://www.bioconductor.org/packages/release/bioc/html/viper.html for the R-package). Finally we will show how we can use CARNIVAL to combine all this information in order to infer the causal regulatory network.
-
-Through OmnipathR package, we build the network object needed for contextualizing the signalling network with CARNIVAL.
-
-```R
-library(OmnipathR) # load OmnipathR library
-##importing interactions from SignaLink3, PhosphoSite and Signor
-interactions <- import_Omnipath_Interactions(filter_databases=c("SignaLink3","PhosphoSite","Signor"))
-## keeping the directed interactions
-interactions <- interactions[which(interactions$is_directed==1), ]
-# keeping signed interactions only
-interactions <- interactions[which((interactions$is_stimulation+interactions$is_inhibition)==1), ]
-## now building the network data-frame and keeping it as netObj
-network <- matrix(data = , nrow = nrow(interactions), ncol = 3)
-network[, 1] <- interactions$source_genesymbol
-network[which(interactions$is_stimulation==1), 2] <- "1"
-network[which(interactions$is_inhibition==1), 2] <- "-1"
-network[, 3] <- interactions$target_genesymbol
-netObj <- as.data.frame(network)
-```
-
-For the analysis we consider the expression data example from the [progeny](https://github.com/saezlab/progeny). We estimate normalized (from -1 to 1) pathway activity scores via the progeny function for the first sample and then we assign the inferred activities as node weights to the progeny members from the progenyMembers object loaded from CARNIVAL package. Users can estimate the pathway activities for any sample they wish (see documentation of _assignPROGENyScores()_ function)
-
-```R
-library(progeny)
-library(CARNIVAL)
-expr <- as.matrix(read.csv(system.file("extdata", "human_input.csv", package = "progeny"), row.names = 1))
-human_def_act <- progeny(expr, scale = TRUE, organism = "Human", top = 100, perm = 10000, z_scores = FALSE)
-## loading the progeny members to assign the weights
-load(file = system.file("progenyMembers.RData",package="CARNIVAL"))
-## now assigning the PROGENy weights to pathway members only for the first
-## sample which we can consider for the CARNIVAL analysis
-weightObj <- assignPROGENyScores(progeny = human_def_act, progenyMembers = progenyMembers, id = "gene", access_idx = 1)
-```
-
-Next we can retrieve regulons from OmniPath and create the regulon table. From there we obtain the viper regulon list through the createRegulonList function (see documentation for more details).
-
-```R
-regulon_df <- import_TFregulons_Interactions(select_organism = 9606)
-regulon_df <- regulon_df[which((regulon_df$is_stimulation+regulon_df$is_inhibition)==1), ]
-regulon_table <- matrix(data = , nrow = nrow(regulon_df), ncol = 3)
-regulon_table[, 1] <- regulon_df$source_genesymbol
-regulon_table[which(regulon_df$is_stimulation==1), 2] = "1"
-regulon_table[which(regulon_df$is_inhibition==1), 2] = "-1"
-regulon_table[, 3] <- regulon_df$target_genesymbol
-regulons <- createRegulonList(regulon_table = regulon_table)
-```
-
-From here we can estimate the TF activities and generate the continuos measurement inputs for CARNIVAL.
-
-```R
-library(viper)
-TF_activities = as.data.frame(viper::viper(eset = expr, regulon = regulons, nes = TRUE, method = 'none', minsize = 4, eset.filter = FALSE))
-tfList <- generateTFList(df = TF_activities, top = "all", access_idx = 1)
-```
-
-So far we have generated the prior knowledge network which will be used to contextualize the regulatory signalling network (_netObj_) as well as a list object containing the progeny weights (_weightObj_) and the TF activities (tfList to be assigned to the _measObj_). For running CARNIVAL we have to access one element at the time from the weightObj and tfList. We use all this as inputs to run the CARNIVAL analysis through the _runCARNIVAL()_ function. Since the input targets are not known, we perform the invCARNIVAL analysis.
-
-```R
-##users need to define the path to the cplex solver
-res <- runCARNIVAL(measObj = tfList[[1]], netObj = netObj, weightObj = weightObj[[1]], solverPath = solverPath, solver = "cplex", DOTfig = TRUE)
-```
-
-The solution network of this small real-case application will be also saved as a DOT figure in the working directory.
 
 ## License
 
