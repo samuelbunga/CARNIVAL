@@ -7,7 +7,7 @@ prepareLPMatrixSingle <- function(variables = variables,
   
   mt = transformVariables(variables = variables, measObj = measObj)
   
-  lpFile = read_csv(file = paste0("testFile_", 1, "_", 1, ".lp"))
+  lpFile = readr::read_csv(file = paste0("testFile_", 1, "_", 1, ".lp"))
   
   lpFile$`enter Problem` <- as.character(lpFile$`enter Problem`)
   
