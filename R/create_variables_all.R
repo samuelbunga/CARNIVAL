@@ -15,18 +15,19 @@ create_variables_all <- function(pknList=pknList, dataMatrix=dataMatrix){
 
     colnames(pknList) <- c("X1", "X2", "X3")
 
-    nodes <- paste0("xb", 1:(nrow(dataMatrix$dataMatrix)*
-                               ncol(dataMatrix$dataMatrix)), 
+    nodes <- paste0("xb", seq_len((nrow(dataMatrix$dataMatrix)*
+                                     ncol(dataMatrix$dataMatrix))), 
                     "_", conditionIDX)
-    nodesUp <- paste0("xb", (nrow(dataMatrix$dataMatrix)*
-                               ncol(dataMatrix$dataMatrix)+1):
-                        (2*nrow(dataMatrix$dataMatrix)*
-                           ncol(dataMatrix$dataMatrix)), 
+    nodesUp <- paste0("xb", seq(from = nrow(dataMatrix$dataMatrix)*
+                                  ncol(dataMatrix$dataMatrix)+1, 
+                                to = 2*nrow(dataMatrix$dataMatrix)*
+                                  ncol(dataMatrix$dataMatrix), 
+                                by = 1), 
                       "_", conditionIDX)
-    nodesDown <- paste0("xb", (2*nrow(dataMatrix$dataMatrix)*
-                                 ncol(dataMatrix$dataMatrix)+1):
-                          (3*nrow(dataMatrix$dataMatrix)*
-                             ncol(dataMatrix$dataMatrix)), 
+    nodesDown <- paste0("xb", seq(from = 2*nrow(dataMatrix$dataMatrix)*
+                                    ncol(dataMatrix$dataMatrix)+1, 
+                                  to = 3*nrow(dataMatrix$dataMatrix)*
+                                    ncol(dataMatrix$dataMatrix), by = 1), 
                         "_", conditionIDX)
 
     expNodes <- paste0("Species ", dataMatrix$species, 
@@ -50,23 +51,34 @@ create_variables_all <- function(pknList=pknList, dataMatrix=dataMatrix){
     nodesALL <- c(nodes, nodesUp, nodesDown)
     expNodesALL <- c(expNodes, expNodesUp, expNodesDown)
 
-    idxNodes <- 1:(nrow(dataMatrix$dataMatrix)*ncol(dataMatrix$dataMatrix))
-    idxNodesUp <- (nrow(dataMatrix$dataMatrix)*ncol(dataMatrix$dataMatrix)+1):
-      (2*nrow(dataMatrix$dataMatrix)*ncol(dataMatrix$dataMatrix))
-    idxNodesDown <- (2*nrow(dataMatrix$dataMatrix)*ncol(dataMatrix$dataMatrix)+1):
-      (3*nrow(dataMatrix$dataMatrix)*ncol(dataMatrix$dataMatrix))
+    idxNodes <- seq_len(nrow(dataMatrix$dataMatrix)*ncol(dataMatrix$dataMatrix))
+    idxNodesUp <- seq(from = nrow(dataMatrix$dataMatrix)*
+                        ncol(dataMatrix$dataMatrix)+1,
+                      to = 2*nrow(dataMatrix$dataMatrix)*
+                        ncol(dataMatrix$dataMatrix),
+                      by = 1)
+    idxNodesDown <- seq(from = 2*nrow(dataMatrix$dataMatrix)*
+                          ncol(dataMatrix$dataMatrix)+1, 
+                        to = 3*nrow(dataMatrix$dataMatrix)*
+                          ncol(dataMatrix$dataMatrix), 
+                        by = 1)
 
     # edges
-    edgesUp <- paste0("xb", (length(nodesALL)+1):(length(nodesALL)+
-                                                    nrow(pknList)*
-                                                    nrow(dataMatrix$dataMatrix)), 
+    edgesUp <- paste0("xb", seq(from = length(nodesALL)+1, 
+                                to = length(nodesALL)+
+                                  nrow(pknList)*
+                                  nrow(dataMatrix$dataMatrix), by = 1), 
                       "_", conditionIDX)
     
-    edgesDown <- paste0("xb", (length(nodesALL)+
-                                 nrow(pknList)*nrow(dataMatrix$dataMatrix)+1):
-                          (length(nodesALL)+nrow(pknList)*
-                             nrow(dataMatrix$dataMatrix)+nrow(pknList)*
-                             nrow(dataMatrix$dataMatrix)), "_", conditionIDX)
+    edgesDown <- paste0("xb", seq(from = length(nodesALL)+
+                                    nrow(pknList)*
+                                    nrow(dataMatrix$dataMatrix)+1, 
+                                  to = length(nodesALL)+
+                                    nrow(pknList)*
+                                    nrow(dataMatrix$dataMatrix)
+                                  +nrow(pknList)*
+                                    nrow(dataMatrix$dataMatrix), by = 1), 
+                        "_", conditionIDX)
 
     expEdgesUp <- paste0("ReactionUp ", as.character(pknList$X1), "=", 
                                        as.character(pknList$X3), 
@@ -91,14 +103,14 @@ create_variables_all <- function(pknList=pknList, dataMatrix=dataMatrix){
     edgesALL <- c(edgesUp, edgesDown)
     expEdgesALL <- c(expEdgesUp, expEdgesDown)
 
-    idxEdgesUp <- (length(nodesALL)+1):(length(nodesALL)+
-                                          1+
-                                          nrow(pknList)*
-                                          nrow(dataMatrix$dataMatrix)-1)
-    idxEdgesDown <- (length(nodesALL)+
-                       1+nrow(pknList)*nrow(dataMatrix$dataMatrix)):
-      (length(nodesALL)+1+nrow(pknList)*nrow(dataMatrix$dataMatrix)+
-         nrow(pknList)*nrow(dataMatrix$dataMatrix)-1)
+    idxEdgesUp <- seq(from = length(nodesALL)+1, to = length(nodesALL)+
+                        1+nrow(pknList)*nrow(dataMatrix$dataMatrix)-1, by = 1)
+    
+    idxEdgesDown <- seq(from = length(nodesALL)+
+                          1+nrow(pknList)*nrow(dataMatrix$dataMatrix), 
+                        to = length(nodesALL)+1+
+                          nrow(pknList)*nrow(dataMatrix$dataMatrix)+
+                          nrow(pknList)*nrow(dataMatrix$dataMatrix)-1, by = 1)
 
     signs <- pknList$X2
     reactionSource <- as.character(pknList$X1)
@@ -147,10 +159,14 @@ create_variables_all <- function(pknList=pknList, dataMatrix=dataMatrix){
                 idxExperimentEdges=idxExperimentEdges,
                 expNodesReducedUp=expNodesReducedUp, 
                 expNodesReducedDown=expNodesReducedDown, 
-                idxB = (length(c(nodesALL, edgesALL))+1):
-                  (length(c(nodesALL, edgesALL))+length(varB)),
-                idxDist = (length(c(nodesALL, edgesALL))+length(varB)+1):
-                  (length(c(nodesALL, edgesALL))+length(varB)+length(dist)), 
+                idxB = seq(from = length(c(nodesALL, edgesALL))+1, 
+                           to = length(c(nodesALL, edgesALL))+length(varB), 
+                           by = 1),
+                idxDist = seq(from = length(c(nodesALL, edgesALL))+
+                                length(varB)+1, 
+                              to = length(c(nodesALL, edgesALL))+
+                                length(varB)+length(dist), 
+                              by = 1), 
                 uTable = uTable)
 
     return(res)
@@ -160,7 +176,7 @@ create_variables_all <- function(pknList=pknList, dataMatrix=dataMatrix){
   res <- list()
   ## namesRes <- c()
 
-  for(i in 1:nrow(dataMatrix$dataMatrix)){
+  for(i in seq_len(nrow(dataMatrix$dataMatrix))){
 
     dM <- dataMatrix
     dM$dataMatrix <- as.matrix(t(dataMatrix$dataMatrix[i, ]))
@@ -173,7 +189,7 @@ create_variables_all <- function(pknList=pknList, dataMatrix=dataMatrix){
 
   }
 
-  names(res) <- paste0("Condition_", 1:nrow(dataMatrix$dataMatrix))
+  names(res) <- paste0("Condition_", seq_len(nrow(dataMatrix$dataMatrix)))
 
   return(res)
 
