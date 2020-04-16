@@ -25,7 +25,7 @@ solveCARNIVAL <- function(solverPath = solverPath,
                           repIndex = repIndex){
   
   ## Write constraints as ILP inputObj
-  print("Writing constraints...")
+  message("Writing constraints...")
   
   if(experimental_conditions[1]=="NULL"){experimental_conditions <- NULL}
 

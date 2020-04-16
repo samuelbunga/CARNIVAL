@@ -30,7 +30,7 @@ solveCARNIVALSingle <- function(data = data, pknList = pknList,
   
   ## Solve ILP problem with cplex, remove temp files, 
   ## and return to the main directory
-  print("Solving LP problem...")
+  message("Solving LP problem...")
   
   if(solver=="cplex"){
     
@@ -45,10 +45,10 @@ solveCARNIVALSingle <- function(data = data, pknList = pknList,
     }
     
     ## Write result files in the results folder
-    print("Saving results...")
+    message("Saving results...")
     resList <- list()
     if (file.exists(paste0("results_cplex_",condition,"_",repIndex,".txt"))) {
-      for(i in 1:length(variables)){
+      for(i in seq_len(length(variables))){
         res <- exportResult(cplexSolutionFileName = paste0("results_cplex_",
                                                            condition,"_",
                                                            repIndex,".txt"),
@@ -67,7 +67,7 @@ solveCARNIVALSingle <- function(data = data, pknList = pknList,
                                  UP2GS=FALSE)}
       }
     } else {
-      print("No result to be written")
+      message("No result to be written")
       return(NULL)
     }
     
@@ -77,9 +77,9 @@ solveCARNIVALSingle <- function(data = data, pknList = pknList,
     objs <- ls(pos = ".GlobalEnv")
     rm(list = objs[grep("pknList", objs)], pos = ".GlobalEnv")
     
-    print(" ")
-    print("--- End of the CARNIVAL pipeline ---")
-    print(" ")
+    message(" ")
+    message("--- End of the CARNIVAL pipeline ---")
+    message(" ")
     
     result = resList[[1]]
     

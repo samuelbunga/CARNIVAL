@@ -95,7 +95,7 @@ runCARNIVAL <- function(inputObj=NULL,
                         netObj=netObj,
                         weightObj=NULL,
                         solverPath=NULL,
-                        solver="lpSolve",
+                        solver=c('lpSolve', 'cplex', 'cbc'),
                         DOTfig=FALSE,
                         timelimit=3600,
                         mipGAP=0.05,
@@ -110,6 +110,7 @@ runCARNIVAL <- function(inputObj=NULL,
                         dir_name=paste0(getwd(), "/DOTfigures"))
 {
 
+  solver <- match.arg(solver)
   res = checkInputs(solverPath = solverPath, netObj = netObj, measObj = measObj,
                     inputObj = inputObj, weightObj = weightObj, DOTfig = DOTfig,
                     timelimit = timelimit, mipGAP = mipGAP,
