@@ -28,7 +28,7 @@ transformObjectiveFunction <- function(mt = mt, lpFile = lpFile){
           split = " ", fixed = TRUE), "[[", 2)))
   
   idx <- rep(NA, length(varID))
-  for(ii in 1:length(varID)){
+  for(ii in seq_len(length(varID))){
     idx[ii] = which(mt[, 1]==varID[ii])
   }
   

@@ -7,7 +7,8 @@ transformConstraints <- function(mt = mt, lpFile = lpFile){
   idx1 <- which(lpFile$`enter Problem`=="Subject To")
   idx2 <- which(lpFile$`enter Problem`=="Bounds")
   
-  constraintSet <- lpFile$`enter Problem`[(idx1+1):(idx2-1)]
+  constraintSet <- lpFile$`enter Problem`[seq(from = idx1+1, 
+                                              to = idx2-1, by = 1)]
   constraintSet <- lapply(strsplit(x = constraintSet, 
                                    split = "\t", fixed = TRUE), "[[", 2)
   
@@ -19,7 +20,7 @@ transformConstraints <- function(mt = mt, lpFile = lpFile){
   f.dir <- rep("", length(constraintSet))
   f.rhs <- rep("", length(constraintSet))
   
-  for(ii in 1:length(constraintSet)){
+  for(ii in seq_len(length(constraintSet))){
     
     currConstraint <- constraintSet[[ii]]
     currConstraintSplit <- strsplit(x = currConstraint, split = " ", 
