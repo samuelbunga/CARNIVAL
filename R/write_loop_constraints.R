@@ -8,10 +8,10 @@ write_loop_constraints <- function(variables=variables,
                                    inputs=inputs) {
   
   M <- 101
-  ## constraints1 <- c()
-  ## constraints2 <- c()
-  ## constraints3 <- c()
-  ## constraints4 <- c()
+  constraints1 <- c()
+  constraints2 <- c()
+  constraints3 <- c()
+  constraints4 <- c()
   
   if(length(which(pknList[, 3]%in%colnames(inputs)))==0){
     
@@ -25,8 +25,6 @@ write_loop_constraints <- function(variables=variables,
     
   }
   
-  constraints1 <- rep("character", length(variables))
-  constraints2 <- rep("character", length(variables))
   for(ii in seq_len(length(variables))){
     
     reactionsUp <- 
@@ -57,7 +55,7 @@ write_loop_constraints <- function(variables=variables,
                  sapply(strsplit(kk, split = "="), function(x) x[1]), 
                  " - dist_", sapply(strsplit(kk, split = "="), 
                                     function(x) x[2]), " <= ", M-1)
-    constraints1[ii] <- cc
+    constraints1 <- c(constraints1, cc)
     
     ##
     if(length(which(pknList[, 3]%in%colnames(inputs))) > 0){
@@ -78,7 +76,7 @@ write_loop_constraints <- function(variables=variables,
                         function(x) x[1]), " - dist_", 
                  sapply(strsplit(kk, split = "="), 
                         function(x) x[2]), " <= ", M-1)
-    constraints2[ii] <- cc
+    constraints2 <- c(constraints2, cc)
     
   }
   
