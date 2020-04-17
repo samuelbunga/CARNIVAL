@@ -15,12 +15,11 @@ write_objective_function <- function(dataMatrix = dataMatrix,
     measured <- gsub(colnames(dataMatrix$dataMatrix)[dataMatrix$dsID], 
                      pattern = "DS:", replacement = "")
 
-    idxMeasured <- c()
+    idxMeasured <- rep(x = 0, length(measured))
     for(i in seq_len(length(measured))){
 
-      idxMeasured <- c(idxMeasured, 
-                       which(variables$expNodesReduced==paste0("Species ", 
-                                                               measured[i])))
+      idxMeasured[i] <- which(variables$expNodesReduced==paste0("Species ", 
+                                                               measured[i]))
 
     }
 
@@ -80,12 +79,11 @@ write_objective_function <- function(dataMatrix = dataMatrix,
     measured <- gsub(colnames(dataMatrix$dataMatrix)[dataMatrix$dsID], 
                      pattern = "DS:", replacement = "")
 
-    idxMeasured <- c()
+    idxMeasured <- rep(x = 0, length(measured))
     for(i in seq_len(length(measured))){
 
-      idxMeasured <- c(idxMeasured, 
-                       which(variables$expNodesReduced==paste0("Species ", 
-                                                               measured[i])))
+      idxMeasured[i] <- which(variables$expNodesReduced==paste0("Species ", 
+                                                               measured[i]))
 
     }
 

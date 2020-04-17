@@ -6,7 +6,7 @@
 write_constraints_4 <- function(variables=variables, 
                                 conditionIDX=conditionIDX) {
   
-  constraints4 <- rep("", length(variables$idxEdgesUp))
+  constraints4 <- rep("character", length(variables$idxEdgesUp))
   
   idx1 <- which(variables$signs==1)
   idx2 <- which(variables$signs==-1)
